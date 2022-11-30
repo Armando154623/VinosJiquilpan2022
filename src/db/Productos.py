@@ -8,53 +8,74 @@ class Productos:
         self.con = Connection()
 
     def obtener_productos(self, filtro_registro=None, atributos=None):
-        lista_pipelines = []
         response = {"status": False, "resultado": []}
+        lista_pipelines = []
         if self.con.abrir():
             try:
                 filtro = {
-                    "$match": {
-                        "productoTipo": {'$ne': 1}
+                    "$match":
+                    {
+                        "productoTipo":
+                        {
+                            '$ne': 1
+                        }
                     }
                 }
                 proyeccion = {
-                    "$project": {
+                    '$project':
+                    {
                         '_id': 0,
                         'idCategoria': "$idCategoria.idCategoria",
                         'nombreCategoria': "$idCategoria.nombreCategoriaProducto",
                         'idProducto': 1,
                         'productoTipo': 1,
+                        'productoNombreCorto': 1,
                         'productoImagen': 1,
                         'productoCosto': 1,
                         'precioVenta':
-                            {
-                                "$subtract": [{
-                                    "$add": [
+                        {
+                            '$subtract':
+                            [
+                                {
+                                    '$add':
+                                    [
                                         {
-                                            "$multiply": [
+                                            '$multiply':
+                                            [
                                                 '$productoCosto',
-                                                {"$divide": ['$productoGanancia', 100]}
+                                                {
+                                                    '$divide': ['$productoGanancia', 100]
+                                                }
                                             ]
                                         },
                                         '$productoCosto'
                                     ]
                                 },
-                                    {
-                                        "$multiply": [
-                                            '$productoCosto',
-                                            {"$divide": ['$productoDescuento', 100]}
-                                        ]
-                                    }]
-                            },
-                        'descuento': {
-                            "$multiply": [
+                                {
+                                    '$multiply':
+                                    [
+                                        '$productoCosto',
+                                        {
+                                            '$divide': ['$productoDescuento', 100]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        'descuento':
+                        {
+                            '$multiply':
+                            [
                                 '$productoCosto',
-                                {"$divide": ['$productoDescuento', 100]}
+                                {
+                                    '$divide': ['$productoDescuento', 100]
+                                }
                             ]
                         }
                     }
                 }
 
+                # Agregar los niveles que se requieren
                 if filtro_registro is None:
                     lista_pipelines.append(filtro)
                 else:

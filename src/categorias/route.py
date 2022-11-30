@@ -10,4 +10,4 @@ from src.db.Categorias import Categorias
 def get_categorias():
     obj = Categorias()
     print(obj.obtener_categorias())
-    return render_template("index.html")
+    return render_template("categorias/index.html")

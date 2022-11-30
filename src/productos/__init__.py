@@ -1,7 +1,8 @@
-# El archivo __init__ es constructor del módulo productos
+# El archivo __init__ realmente es constructor del módulo categorias
 from flask import Blueprint
 
-# Definir el blueprint
-producto = Blueprint('productos', __name__, url_prefix='/productos')
+# Definir el Blueprint
+producto = Blueprint('producto', __name__, url_prefix='/productos', template_folder='templates')
 
+# Le estamos diciendo Blueprint que tiene rutas definidas
 from . import route
